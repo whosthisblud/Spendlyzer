@@ -10,6 +10,7 @@ from functools import lru_cache
 import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.config import get_settings
@@ -56,9 +57,26 @@ def get_current_user(
 
     user = db.get(User, user_id)
     if user is None:
-        user = User(id=user_id, email=payload.get("email"), default_currency=get_settings().default_currency)
+        user = _provision_user(db, user_id, payload.get("email"))
+    return user
+
+
+def _provision_user(db: Session, user_id: uuid.UUID, email: str | None) -> User:
+    """Create the user row and default categories on first request.
+
+    A new user's first page load fires several API calls at once, so concurrent requests can
+    race to insert the same row. The loser rolls back and reads the winner's row.
+    """
+    try:
+        user = User(id=user_id, email=email, default_currency=get_settings().default_currency)
         db.add(user)
         db.flush()
         seed_default_categories(db, user.id)
         db.commit()
-    return user
+        return user
+    except IntegrityError:
+        db.rollback()
+        user = db.get(User, user_id)
+        if user is None:
+            raise
+        return user

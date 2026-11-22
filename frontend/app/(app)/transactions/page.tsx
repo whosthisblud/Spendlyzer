@@ -79,13 +79,13 @@ export default function TransactionsPage() {
 
       <Card>
         <div className="mb-4 grid grid-cols-2 gap-2 md:grid-cols-5">
-          <Input placeholder="Search" value={filters.q} onChange={(e) => update("q", e.target.value)} className="col-span-2 md:col-span-1" />
-          <Select value={filters.type} onChange={(e) => update("type", e.target.value)}>
+          <Input placeholder="Search" aria-label="Search transactions" value={filters.q} onChange={(e) => update("q", e.target.value)} className="col-span-2 md:col-span-1" />
+          <Select aria-label="Type filter" value={filters.type} onChange={(e) => update("type", e.target.value)}>
             <option value="">All types</option>
             <option value="expense">Expenses</option>
             <option value="income">Income</option>
           </Select>
-          <Select value={filters.category_id} onChange={(e) => update("category_id", e.target.value)}>
+          <Select aria-label="Category filter" value={filters.category_id} onChange={(e) => update("category_id", e.target.value)}>
             <option value="">All categories</option>
             <option value="__none">Uncategorized</option>
             {categories.map((c) => (

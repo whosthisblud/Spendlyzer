@@ -9,6 +9,7 @@ export function formatMoney(value: string | number | null | undefined, currency 
       new Intl.NumberFormat("en-IN", {
         style: "currency",
         currency,
+        minimumFractionDigits: compact ? 0 : 2,
         maximumFractionDigits: compact ? 1 : 2,
         notation: compact ? "compact" : "standard",
       }),

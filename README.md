@@ -113,13 +113,39 @@ Open http://localhost:3000.
 
 ### Tests
 
+Backend (pytest):
+
 ```bash
 cd backend
 pytest
 ```
 
-Covers auth rejection and token verification, CRUD, validation, cross-user isolation, CSV import and deduplication,
-budgets, dashboard aggregation, insights, and all three ML modules including insufficient-data paths.
+Covers auth rejection and token verification, concurrent first-request user provisioning, CRUD, validation,
+cross-user isolation, CSV import and deduplication, budgets, dashboard aggregation, insights, and all three ML modules
+including insufficient-data paths.
+
+Frontend unit tests (Vitest + React Testing Library):
+
+```bash
+cd frontend
+npm test
+```
+
+Covers formatting, the API client (auth header, error parsing, network failures), the auth hook and form, the
+transaction form (create, edit, category suggestion, type filtering, server errors), CSV import results, budget bars
+and the category chart.
+
+End-to-end (Playwright):
+
+```bash
+cd frontend
+npm run test:e2e
+```
+
+Starts the real FastAPI backend on a throwaway SQLite database and a production Next.js build, then drives the app in
+Chromium at desktop and phone sizes. No Supabase project is needed: tests sign their own tokens and inject the session
+where supabase-js stores it. Each test runs as a fresh user. Requires the backend virtualenv (`backend/venv`) or set
+`PYTHON` to an interpreter with `backend/requirements.txt` installed. Use `npm run test:e2e:debug` to record traces.
 
 ## Environment Variables
 
@@ -178,7 +204,7 @@ Never commit secrets or environment files.
 - [x] Frontend/backend integration
 - [x] Input validation and error handling
 - [x] Authentication and authorization testing
-- [ ] Unit and integration tests (backend done; frontend pending)
+- [x] Unit and integration tests
 - [ ] Deployment
 
 ## License

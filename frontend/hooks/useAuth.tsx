@@ -48,7 +48,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { needsConfirmation: !data.session };
       },
       async signOut() {
-        await getSupabase().auth.signOut();
+        const supabase = getSupabase();
+        const { error } = await supabase.auth.signOut();
+        // If the logout request fails (offline, Supabase unreachable), supabase-js keeps the
+        // session. Clear it locally so "Sign out" always signs the user out of this device.
+        if (error) await supabase.auth.signOut({ scope: "local" });
       },
     }),
     [session, loading],

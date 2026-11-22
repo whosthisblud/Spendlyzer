@@ -34,3 +34,29 @@ def test_hs256_token_accepted_and_user_provisioned(monkeypatch):
         expired = jwt.encode({"sub": "11111111-1111-1111-1111-111111111111", "aud": "authenticated",
                               "exp": int(time.time()) - 10}, settings.supabase_jwt_secret, algorithm="HS256")
         assert c.get("/api/me", headers={"Authorization": f"Bearer {expired}"}).status_code == 401
+
+
+def test_concurrent_first_requests_do_not_500(monkeypatch):
+    """Simulates the race: another request creates the user between our lookup and insert."""
+    import uuid
+
+    from app import auth
+    from app.database import SessionLocal
+    from app.models import Category, User
+    from app.services.category_service import seed_default_categories
+
+    uid = uuid.UUID("33333333-3333-3333-3333-333333333333")
+    winner = SessionLocal()
+    winner.add(User(id=uid, email="w@x.y"))
+    winner.flush()
+    seed_default_categories(winner, uid)
+    winner.commit()
+    winner.close()
+
+    db = SessionLocal()
+    try:
+        user = auth._provision_user(db, uid, "w@x.y")  # loser path: insert collides
+        assert user.id == uid
+        assert db.query(Category).filter(Category.user_id == uid).count() == 18  # no duplicate seeding
+    finally:
+        db.close()
