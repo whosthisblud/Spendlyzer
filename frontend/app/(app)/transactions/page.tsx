@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CsvImport } from "@/components/CsvImport";
 import { TransactionForm } from "@/components/TransactionForm";
 import { Badge, Button, Card, Empty, ErrorBox, Input, Loading, Modal, Select } from "@/components/ui";
@@ -21,6 +21,16 @@ export default function TransactionsPage() {
   const [showForm, setShowForm] = useState(false);
   const [showImport, setShowImport] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
+
+  // Home-screen shortcut "Add transaction" opens /transactions?new=1.
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("new") === "1") {
+      setShowForm(true);
+      url.searchParams.delete("new");
+      window.history.replaceState(null, "", url.pathname + url.search);
+    }
+  }, []);
 
   const uncategorized = filters.category_id === "__none";
   const path = `/api/transactions${qs({

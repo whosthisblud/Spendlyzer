@@ -22,7 +22,11 @@ export function applyTheme(pref: ThemePreference): void {
   const root = document.documentElement;
   root.dataset.theme = resolved;
   root.style.colorScheme = resolved;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", THEME_COLORS[resolved]);
 }
+
+/** Browser/status bar colour per theme; matches the nav background. */
+export const THEME_COLORS: Record<ResolvedTheme, string> = { light: "#ffffff", dark: "#09090b" };
 
 export function savePreference(pref: ThemePreference): void {
   try {
@@ -37,4 +41,4 @@ export function savePreference(pref: ThemePreference): void {
  * Runs in <head> before first paint so the page never flashes the wrong theme.
  * Kept dependency-free and in sync with readPreference/resolve above.
  */
-export const THEME_INIT_SCRIPT = `(function(){try{var p=localStorage.getItem("${THEME_STORAGE_KEY}");var d=p==="dark"||(p!=="light"&&window.matchMedia("(prefers-color-scheme: dark)").matches);var r=document.documentElement;r.dataset.theme=d?"dark":"light";r.style.colorScheme=d?"dark":"light";}catch(e){}})();`;
+export const THEME_INIT_SCRIPT = `(function(){try{var p=localStorage.getItem("${THEME_STORAGE_KEY}");var d=p==="dark"||(p!=="light"&&window.matchMedia("(prefers-color-scheme: dark)").matches);var r=document.documentElement;r.dataset.theme=d?"dark":"light";r.style.colorScheme=d?"dark":"light";var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",d?"#09090b":"#ffffff");}catch(e){}})();`;

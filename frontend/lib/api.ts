@@ -1,3 +1,4 @@
+import { CACHED_AT_HEADER, FRESH_EVENT, OFFLINE_HEADER, STALE_EVENT } from "./pwa";
 import { getSupabase } from "./supabase";
 
 const BASE = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000").replace(/\/$/, "");
@@ -36,6 +37,13 @@ export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
     res = await fetch(`${BASE}${path}`, { ...init, headers });
   } catch {
     throw new ApiError(0, "Cannot reach the API. Is the backend running?");
+  }
+  if (typeof window !== "undefined" && (!init.method || init.method === "GET")) {
+    if (res.headers.get(OFFLINE_HEADER)) {
+      window.dispatchEvent(new CustomEvent(STALE_EVENT, { detail: { cachedAt: res.headers.get(CACHED_AT_HEADER) } }));
+    } else {
+      window.dispatchEvent(new Event(FRESH_EVENT));
+    }
   }
   if (res.status === 204) return undefined as T;
   const body = await res.json().catch(() => null);

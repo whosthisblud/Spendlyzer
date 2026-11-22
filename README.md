@@ -42,6 +42,17 @@ anomaly counts, all computed from the user's own transactions.
 is saved per browser and applied before first paint, so there is no flash of the wrong theme. "System" follows OS
 changes live. Charts use separately tuned dark-mode colours.
 
+**Installable app (PWA).** Install from the browser on Android, desktop Chrome/Edge ("Install app" in the nav) or
+iOS Safari (Share > Add to Home Screen). Runs full-screen with its own icon, home-screen shortcuts (Add transaction,
+Insights), and safe-area support for notched phones.
+- Offline: pages you have opened, and the data last shown on them, are available without a connection. A banner
+  shows that you are viewing saved data and when it was saved. Changes need a connection and fail with a clear message.
+- Privacy: saved API data is partitioned per user and deleted on sign-out, so a shared device never shows one
+  account's data to another.
+- Updates: a new deploy downloads in the background and offers a "Reload" prompt instead of refreshing mid-task.
+- Implemented with a hand-written service worker (`frontend/public/sw.js`) and Next.js's manifest route; no plugin.
+  The service worker runs in production builds only (`npm run build && npm start`).
+
 INR is the default currency. Every transaction and budget stores its own ISO currency code; analytics are computed per
 currency (the user's default unless specified).
 
@@ -137,7 +148,8 @@ npm test
 
 Covers formatting, the API client (auth header, error parsing, network failures), the auth hook and form, the
 transaction form (create, edit, category suggestion, type filtering, server errors), CSV import results, budget bars,
-the category chart and theme switching.
+the category chart, theme switching, PWA banners, and the service worker's caching rules (run against
+simulated Cache Storage and network).
 
 End-to-end (Playwright):
 
@@ -147,7 +159,7 @@ npm run test:e2e
 ```
 
 Starts the real FastAPI backend on a throwaway SQLite database and a production Next.js build, then drives the app in
-Chromium at desktop and phone sizes. No Supabase project is needed: tests sign their own tokens and inject the session
+Chromium at desktop and phone sizes, including installability and offline use. No Supabase project is needed: tests sign their own tokens and inject the session
 where supabase-js stores it. Each test runs as a fresh user. Requires the backend virtualenv (`backend/venv`) or set
 `PYTHON` to an interpreter with `backend/requirements.txt` installed. Use `npm run test:e2e:debug` to record traces.
 

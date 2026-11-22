@@ -2,6 +2,7 @@
 
 import type { Session, User } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { clearApiCaches } from "@/lib/pwa";
 import { getSupabase } from "@/lib/supabase";
 
 interface AuthState {
@@ -53,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // If the logout request fails (offline, Supabase unreachable), supabase-js keeps the
         // session. Clear it locally so "Sign out" always signs the user out of this device.
         if (error) await supabase.auth.signOut({ scope: "local" });
+        await clearApiCaches();
       },
     }),
     [session, loading],
