@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#059669"/>
+  <!-- Mark kept inside the central 80% so it survives maskable cropping. -->
+  <g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M136 352V160" stroke-width="28" opacity="0.55"/>
+    <path d="M136 352h240" stroke-width="28" opacity="0.55"/>
+    <path d="M168 304l64-72 48 40 88-104" stroke-width="32"/>
+  </g>
+  <circle cx="368" cy="168" r="26" fill="#ffffff"/>
+</svg>
