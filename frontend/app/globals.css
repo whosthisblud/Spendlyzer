@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+/*
+ * Theme is set as data-theme on <html> by an inline script before first paint
+ * (see lib/theme.ts). `dark:` utilities key off it, so the toggle overrides the OS.
+ * The media query is only a fallback for when that script has not run (JS disabled).
+ */
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme]), :root:not([data-theme]) *) {
+      @slot;
+    }
+  }
+}
+
 :root {
   --surface: #fafafa;
   --chart-grid: #e7e5e4;
@@ -12,7 +28,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:where(:not([data-theme="light"])) {
+  :root:not([data-theme]) {
     --surface: #09090b;
     --chart-grid: #27272a;
     --chart-axis: #a1a1aa;
@@ -22,6 +38,17 @@
     --tooltip-border: #3f3f46;
     color-scheme: dark;
   }
+}
+
+:root[data-theme="dark"] {
+  --surface: #09090b;
+  --chart-grid: #27272a;
+  --chart-axis: #a1a1aa;
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --tooltip-bg: #18181b;
+  --tooltip-border: #3f3f46;
+  color-scheme: dark;
 }
 
 body {

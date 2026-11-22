@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { ThemeToggle } from "./ThemeToggle";
 import { cx } from "./ui";
 
 const LINKS = [
@@ -41,6 +42,7 @@ export function Nav() {
           ))}
         </nav>
         <div className="hidden items-center gap-3 md:flex">
+          <ThemeToggle />
           <span className="max-w-48 truncate text-xs text-zinc-500">{user?.email}</span>
           <button onClick={signOut} className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white">
             Sign out
@@ -59,6 +61,10 @@ export function Nav() {
               {l.label}
             </Link>
           ))}
+          <div className="flex items-center justify-between px-2 py-2">
+            <span className="text-sm text-zinc-500">Theme</span>
+            <ThemeToggle />
+          </div>
           <button onClick={signOut} className="block w-full rounded px-2 py-2 text-left text-sm text-zinc-500">
             Sign out ({user?.email})
           </button>

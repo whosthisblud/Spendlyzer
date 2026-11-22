@@ -14,8 +14,8 @@ export function ForecastChart({ data, currency }: { data: { month: string; actua
           <XAxis dataKey="month" tickFormatter={monthLabel} {...AXIS} />
           <YAxis tickFormatter={(v) => formatMoney(v, currency, true)} width={64} {...AXIS} />
           <Tooltip cursor={{ stroke: "var(--chart-axis)", strokeWidth: 1 }} content={<MoneyTooltip currency={currency} labelFormatter={monthLabel} />} />
-          <Line dataKey="actual" name="Actual" stroke="var(--series-1)" strokeWidth={2} dot={{ r: 3 }} connectNulls={false} />
-          <Line dataKey="predicted" name="Predicted" stroke="var(--series-2)" strokeWidth={2} strokeDasharray="5 4" dot={{ r: 4 }} connectNulls />
+          <Line dataKey="actual" name="Actual" stroke="var(--series-1)" strokeWidth={2} dot={{ r: 3, fill: "var(--series-1)", strokeWidth: 0 }} connectNulls={false} />
+          <Line dataKey="predicted" name="Predicted" stroke="var(--series-2)" strokeWidth={2} strokeDasharray="5 4" dot={{ r: 4, fill: "var(--series-2)", strokeWidth: 0 }} connectNulls />
         </LineChart>
       </ResponsiveContainer>
     </div>

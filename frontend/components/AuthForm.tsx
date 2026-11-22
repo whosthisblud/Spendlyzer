@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { ThemeToggle } from "./ThemeToggle";
 import { Button, ErrorBox, Field, Input } from "./ui";
 
 export function AuthForm({ mode }: { mode: "login" | "register" }) {
@@ -38,7 +39,8 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-4">
+    <main className="relative flex min-h-screen items-center justify-center px-4">
+      <ThemeToggle className="absolute right-4 top-4" />
       <div className="w-full max-w-sm">
         <h1 className="mb-1 text-2xl font-bold tracking-tight">
           Spend<span className="text-emerald-600">lyzer</span>

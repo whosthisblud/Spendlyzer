@@ -17,6 +17,10 @@ test("mobile navigation and transaction list", async ({ page, api }) => {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0);
 
+  await page.getByRole("button", { name: "Menu" }).click();
+  await page.getByRole("radio", { name: "Dark theme" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+
   await item.click();
   await expect(page.getByRole("dialog", { name: "Edit transaction" })).toBeVisible();
 });

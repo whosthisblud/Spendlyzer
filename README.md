@@ -38,6 +38,10 @@ month.
 **Insights.** Monthly summary, savings rate, top categories, significant category changes, budget observations and
 anomaly counts, all computed from the user's own transactions.
 
+**Dark mode.** System, light or dark, switchable from the nav (or the mobile menu) and the login page. The choice
+is saved per browser and applied before first paint, so there is no flash of the wrong theme. "System" follows OS
+changes live. Charts use separately tuned dark-mode colours.
+
 INR is the default currency. Every transaction and budget stores its own ISO currency code; analytics are computed per
 currency (the user's default unless specified).
 
@@ -132,8 +136,8 @@ npm test
 ```
 
 Covers formatting, the API client (auth header, error parsing, network failures), the auth hook and form, the
-transaction form (create, edit, category suggestion, type filtering, server errors), CSV import results, budget bars
-and the category chart.
+transaction form (create, edit, category suggestion, type filtering, server errors), CSV import results, budget bars,
+the category chart and theme switching.
 
 End-to-end (Playwright):
 
