@@ -1,0 +1,13 @@
+date,amount,description,type,category,payment_method
+2026-10-01,75000,October salary,income,Salary,net banking
+2026-10-02,18000,Rent October,expense,Rent,net banking
+2026-10-03,450,Swiggy order,expense,,upi
+2026-10-04,1899,BigBasket groceries,expense,,upi
+2026-10-05,320,Uber ride to office,expense,,upi
+2026-10-07,649,Netflix subscription,expense,,credit card
+2026-10-09,1299,Jio fiber broadband,expense,,upi
+2026-10-12,2499,Amazon order,expense,,credit card
+2026-10-15,5000,Freelance website project,income,Freelance,upi
+2026-10-18,780,Zomato dinner,expense,,upi
+2026-10-21,550,Apollo pharmacy,expense,,debit card
+2026-10-25,3400,IRCTC train tickets,expense,,upi
